@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inscriptions - Centre de Danse Delphine Letort</title>
+  <meta name="description" content="Pré-inscription guidée : âge, cours compatibles, places restantes, total et formulaire parent/enfant." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="#">
+        <div class="mark">DL</div>
+        <div><b>Delphine Letort</b><small>Centre de Danse · Le Mans</small></div>
+      </a>
+      <a class="btn" href="#inscription">Commencer</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div>
+        <div class="kicker">Inscriptions saison 2026-2027 · Pré-inscription guidée</div>
+        <h1>Inscrire son enfant devient <span>simple</span>.</h1>
+        <p class="lead">Le parent indique l’âge, choisit les cours compatibles, voit les places restantes, obtient le total puis envoie une pré-inscription claire.</p>
+        <div class="actions"><a class="btn" href="#inscription">Commencer l’inscription</a><a class="btn secondary" href="#cours">Voir les cours</a></div>
+        <div class="points"><div class="point"><b>1. Âge</b><small>Cases cliquables</small></div><div class="point"><b>2. Cours</b><small>Filtrage automatique</small></div><div class="point"><b>3. Sheet</b><small>Delphine reçoit tout</small></div></div>
+      </div>
+      <div class="visual">
+        <div class="ticket"><h2>Assistant inscription</h2><p>Un parcours clair, sans panier compliqué.</p><div class="fake"><div><strong>Âge</strong><span>12 ans</span></div><div><strong>Cours compatibles</strong><span>4 choix</span></div><div><strong>Total</strong><span>650€</span></div><div><strong>Places</strong><span>Urgence réelle</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="inscription">
+      <div class="title"><h2>Le bot d’inscription</h2><p>Scripté, précis, sans IA libre : il accompagne la personne jusqu’à la pré-inscription.</p></div>
+      <div class="grid">
+        <aside class="bot"><div class="bot-head"><div class="avatar">D</div><div><b>Assistant du Centre</b><span>Pré-inscription guidée</span></div></div><div class="bot-body" id="botBody"></div></aside>
+        <section class="panel" id="cours">
+          <div class="panel-top"><div><h3 id="courseTitle">Cours proposés</h3><p id="courseIntro">Choisissez d’abord un âge dans le bot.</p></div><div class="total"><small>Total sélectionné</small><strong id="totalAmount">0€</strong></div></div>
+          <div id="courseGrid" class="courses"></div>
+          <div class="sticky-total"><span id="selectionSummary">Aucun cours sélectionné</span><button class="btn" id="totalBtn" disabled>Choisir un cours pour continuer</button></div>
+          <div class="form-wrap" id="formWrap">
+            <h3>Inscrire mon enfant</h3><p>Delphine reçoit les informations pour valider ou rappeler la famille.</p>
+            <form id="registrationForm">
+              <input type="hidden" id="hiddenAge" name="age"><input type="hidden" id="hiddenCourses" name="selectedCourses"><input type="hidden" id="hiddenTotal" name="total">
+              <div class="form-grid">
+                <div class="field"><label>Nom du parent</label><input name="parentName" required></div>
+                <div class="field"><label>Nom de l’enfant / élève</label><input name="childName" required></div>
+                <div class="field"><label>Date de naissance</label><input name="birthDate" type="date" required></div>
+                <div class="field"><label>Téléphone</label><input name="phone" type="tel" required></div>
+                <div class="field"><label>E-mail</label><input name="email" type="email" required></div>
+                <div class="field"><label>Adresse</label><input name="address" required></div>
+                <div class="field full"><label>Message ou précision</label><textarea name="message" placeholder="Niveau, demande d’essai, frère/sœur déjà inscrit…"></textarea></div>
+                <div class="field full notice">Cette pré-inscription permet à l’école de recevoir votre demande. Elle ne remplace pas la validation définitive.</div>
+                <div class="field full checkbox"><input id="disclaimer" type="checkbox" required><label for="disclaimer">Cette pré-inscription ne garantit pas votre adhésion à l'école de danse.</label></div>
+              </div>
+              <div class="submit"><small>Total indicatif : <b id="formTotal">0€</b></small><button class="btn" type="submit">Envoyer ma pré-inscription</button></div>
+              <div class="success" id="successMsg">Pré-inscription préparée. Branchez l’URL Apps Script pour remplir la Google Sheet automatiquement.</div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <div class="title"><h2>Ce que Delphine reçoit</h2><p>Une Google Sheet exploitable, avec onglets par catégorie et compteur dynamique.</p></div>
+      <div class="info"><article class="card"><h3>Google Sheet</h3><p>Une ligne par cours choisi : parent, enfant, cours, catégorie, prix, total.</p></article><article class="card"><h3>Places restantes</h3><p>Capacité de 30 élèves par cours, avec statut ouvert, urgent ou complet.</p></article><article class="card"><h3>Validation humaine</h3><p>La phrase de non-garantie d’adhésion est intégrée au formulaire.</p></article></div>
+    </section>
+  </main>
+  <footer>© Centre de Danse Delphine Letort · Pré-inscriptions</footer>
+  <script src="app.js"></script>
+</body>
+</html>
