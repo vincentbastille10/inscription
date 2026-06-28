@@ -60,6 +60,18 @@ def _format_email(p):
 
 
 class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Diagnostic : indique QUELLES variables d'env sont vues (jamais leur valeur).
+        seen = {
+            "MAILJET_API_KEY": bool(os.environ.get("MAILJET_API_KEY")),
+            "MAILJET_SECRET_KEY": bool(os.environ.get("MAILJET_SECRET_KEY")),
+            "MJ_APIKEY_PUBLIC": bool(os.environ.get("MJ_APIKEY_PUBLIC")),
+            "MJ_APIKEY_PRIVATE": bool(os.environ.get("MJ_APIKEY_PRIVATE")),
+            "MAIL_FROM": bool(os.environ.get("MAIL_FROM")),
+            "MAIL_TO": bool(os.environ.get("MAIL_TO")),
+        }
+        return self._send(200, {"ok": True, "env_present": seen})
+
     def do_POST(self):
         try:
             length = int(self.headers.get("Content-Length", 0) or 0)
