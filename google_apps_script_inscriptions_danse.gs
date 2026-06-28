@@ -11,6 +11,7 @@ Installation :
 */
 
 const MAX_PER_COURSE = 30;
+const NOTIFY_EMAIL = 'contactdelphineletort@gmail.com';
 
 const COURSES = [
   ['classique-gs', 'ÉVEIL À LA DANSE - GS', 'Classique', 350, 'Samedi 9h15-10h'],
@@ -73,7 +74,45 @@ function doPost(e) {
   const payload = parsePayload_(e);
   const saved = savePayload_(payload);
   refreshAvailabilitySheet();
+  sendNotificationEmail_(payload);
   return json_({ ok: true, saved });
+}
+
+function sendNotificationEmail_(payload) {
+  try {
+    const courses = payload.selectedCourses || [];
+    const lines = courses.map(c =>
+      '- ' + (c.title || '') + ' (' + (c.category || '') + ', ' + (c.schedule || '') + ') : ' + Number(c.price || 0) + '€'
+    ).join('\n');
+
+    const total = Number(payload.total || 0);
+    const subject = 'Nouvelle pré-inscription danse - ' +
+      (payload.childName || payload.parentName || 'élève') + ' (' + total + '€)';
+
+    const body =
+      'Nouvelle pré-inscription reçue depuis le site.\n\n' +
+      '=== COORDONNÉES ===\n' +
+      'Nom du parent : ' + (payload.parentName || '') + '\n' +
+      'Nom enfant / élève : ' + (payload.childName || '') + '\n' +
+      'Âge déclaré : ' + (payload.age || '') + '\n' +
+      'Date de naissance : ' + (payload.birthDate || '') + '\n' +
+      'Téléphone : ' + (payload.phone || '') + '\n' +
+      'Email : ' + (payload.email || '') + '\n' +
+      'Adresse : ' + (payload.address || '') + '\n' +
+      'Message : ' + (payload.message || '') + '\n\n' +
+      '=== COURS CHOISIS ===\n' + (lines || '(aucun)') + '\n\n' +
+      '=== TOTAL À PAYER : ' + total + '€ ===\n\n' +
+      'Rappel : cette pré-inscription ne garantit pas l\'adhésion à l\'école de danse.\n' +
+      'Toutes les inscriptions sont aussi enregistrées dans la Google Sheet.';
+
+    const options = {};
+    if (payload.email) options.replyTo = payload.email;
+
+    MailApp.sendEmail(NOTIFY_EMAIL, subject, body, options);
+  } catch (err) {
+    // Ne bloque jamais l'enregistrement dans la Sheet si l'email échoue.
+    console.error('Email notification failed: ' + err);
+  }
 }
 
 function doGet(e) {

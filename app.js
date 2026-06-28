@@ -176,15 +176,18 @@
       disclaimer: "Cette pré-inscription ne garantit pas votre adhésion à l'école de danse."
     };
 
+    // Envoi de l'email à Delphine via Mailjet (fonction serveur Vercel)
+    fetch("/api/inscription", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+
+    // Optionnel : remplir aussi une Google Sheet si une URL Apps Script est configurée
     if(GOOGLE_APPS_SCRIPT_URL){
       const formData = new FormData();
       formData.append("payload", JSON.stringify(payload));
       fetch(GOOGLE_APPS_SCRIPT_URL, { method:"POST", mode:"no-cors", body: formData });
-    }else{
-      const local = JSON.parse(localStorage.getItem("preinscriptions-danse-demo") || "[]");
-      local.push(payload);
-      localStorage.setItem("preinscriptions-danse-demo", JSON.stringify(local));
-      console.log(payload);
     }
 
     $("successMsg").classList.add("show");
