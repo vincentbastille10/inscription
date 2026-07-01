@@ -19,7 +19,9 @@
     {id:"concours-cnd", title:"PRÉPARATION AUX CONCOURS CND", category:"Technique", ages:[12,13,14,15,16,17,18], price:180, duration:"Cours supplémentaire", schedule:"Classique et Jazz - à confirmer", level:"Concours", taken:14}
   ];
 
-  const AGES = [5,6,7,8,9,10,11,12,13,14,15,16,17,18,{label:"Adulte",value:30}];
+  const AGES = [{label:"2-4 ans (éveil à l'émotion)",value:2},5,6,7,8,9,10,11,12,13,14,15,16,17,18,{label:"Adulte",value:30}];
+  const REDIRECT_AGES = [2,3,4];
+  const RESPIRATION_URL = "https://respiration-zen.fr/";
   const state = { age:null, selected:new Map(), availability:{} };
   const $ = id => document.getElementById(id);
   const bot = $("botBody");
@@ -65,13 +67,47 @@
     state.age = Number(age);
     state.selected.clear();
     userMsg(label);
+
+    if(REDIRECT_AGES.includes(Number(age))){
+      showEveilRedirect();
+      updateTotals();
+      return;
+    }
+
     botMsg(`Parfait. Voici les cours compatibles avec <b>${label}</b>. Cliquez sur une ou plusieurs cases.`);
     renderCourses();
     updateTotals();
     setTimeout(() => $("cours").scrollIntoView({behavior:"smooth"}), 120);
   }
 
+  function showEveilRedirect(){
+    botMsg(`Pour l'<b>éveil à l'émotion (2-4 ans)</b>, l'inscription se fait directement chez notre partenaire <b>Respiration Zen</b> 🌸. Aucune inscription ni coordonnée à saisir ici : je vous redirige vers leur site.`);
+
+    const wrap = document.createElement("div");
+    wrap.className = "choices";
+    const btn = document.createElement("a");
+    btn.className = "choice";
+    btn.href = RESPIRATION_URL;
+    btn.target = "_blank";
+    btn.rel = "noopener";
+    btn.textContent = "S'inscrire sur respiration-zen.fr →";
+    wrap.appendChild(btn);
+    bot.appendChild(wrap);
+    bot.scrollTop = bot.scrollHeight;
+
+    // Zone cours : on affiche le renvoi, pas de cartes ni de panier
+    $("courseTitle").textContent = "Éveil à l'émotion — 2 à 4 ans";
+    $("courseIntro").textContent = "Inscription gérée par notre partenaire Respiration Zen.";
+    grid.innerHTML = `<div class="empty">Pour les <b>2 à 4 ans (éveil à l'émotion)</b>, l'inscription se fait directement sur <a href="${RESPIRATION_URL}" target="_blank" rel="noopener">respiration-zen.fr</a>. Aucune inscription ni coordonnée n'est demandée ici.</div>`;
+
+    // On s'assure qu'aucun formulaire / panier ne s'affiche
+    $("formWrap").classList.remove("show");
+    setTimeout(() => $("cours").scrollIntoView({behavior:"smooth"}), 120);
+  }
+
   function renderCourses(){
+    // Section 2-4 ans : le renvoi vers Respiration Zen est géré ailleurs, ne pas écraser.
+    if(REDIRECT_AGES.includes(Number(state.age))) return;
     grid.innerHTML = "";
     if(!state.age){
       grid.innerHTML = '<div class="empty">Choisissez l’âge dans le bot pour afficher les cours possibles.</div>';
