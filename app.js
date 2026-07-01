@@ -1,5 +1,5 @@
 (() => {
-  const GOOGLE_APPS_SCRIPT_URL = ""; // coller ici l’URL Web App Google Apps Script
+  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbze_x40PZ3y1YK8jUq2qlXUFhgklDcgGOMNBQsN_9psaz9MH5FFand-UNPvvSGeMWZY/exec";
   const MAX_PER_COURSE = 30;
 
   const COURSES = [
@@ -176,14 +176,7 @@
       disclaimer: "Cette pré-inscription ne garantit pas votre adhésion à l'école de danse."
     };
 
-    // Envoi de l'email à Delphine via Mailjet (fonction serveur Vercel)
-    fetch("/api/inscription", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).catch(() => {});
-
-    // Optionnel : remplir aussi une Google Sheet si une URL Apps Script est configurée
+    // Envoi vers Google Apps Script : remplit la Google Sheet ET envoie l'email à Delphine
     if(GOOGLE_APPS_SCRIPT_URL){
       const formData = new FormData();
       formData.append("payload", JSON.stringify(payload));
