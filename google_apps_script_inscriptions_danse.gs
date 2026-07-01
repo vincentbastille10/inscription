@@ -1,20 +1,21 @@
 /*
-Centre de Danse Delphine Letort - Google Sheet pré-inscriptions
+Centre de Danse Delphine Letort - Google Sheet pre-inscriptions
 
 Installation :
-1. Créer une Google Sheet.
+1. Creer une Google Sheet.
 2. Extensions > Apps Script.
 3. Coller ce script.
-4. Lancer setupDanceInscriptionSheet une première fois.
-5. Déployer en application web.
-6. Coller l’URL de l’application web dans app.js, constante GOOGLE_APPS_SCRIPT_URL.
+4. Lancer setupDanceInscriptionSheet une premiere fois.
+5. Deployer en application web.
+6. Coller l'URL de l'application web dans app.js, constante GOOGLE_APPS_SCRIPT_URL.
 */
 
 const MAX_PER_COURSE = 30;
 const NOTIFY_EMAIL = 'contactdelphineletort@gmail.com';
+const SHEET_ID = '15VH3p9iLwv1gOuKkgRMU59mAd7PbTCPW14BeEbH2F7Y';
 
 const COURSES = [
-  ['classique-gs', 'ÉVEIL À LA DANSE - GS', 'Classique', 350, 'Samedi 9h15-10h'],
+  ['classique-gs', 'EVEIL A LA DANSE - GS', 'Classique', 350, 'Samedi 9h15-10h'],
   ['classique-cp', 'DANSE CLASSIQUE - CP', 'Classique', 350, 'Samedi 10h15-11h15'],
   ['classique-ce1-ce2', 'DANSE CLASSIQUE - CE1 / CE2', 'Classique', 350, 'Samedi 11h15-12h15'],
   ['classique-3', 'DANSE CLASSIQUE 3', 'Classique', 350, 'Samedi 13h45-15h'],
@@ -22,12 +23,12 @@ const COURSES = [
   ['classique-5', 'DANSE CLASSIQUE 5', 'Classique', 350, 'Mercredi 16h30-18h'],
   ['soul-enfants', 'DANSE SOUL JAZZ ENFANTS', 'Soul Jazz', 300, 'Jeudi 18h15 ou selon groupe'],
   ['soul-ados-1', 'DANSE SOUL JAZZ ADOS - NIVEAU 1', 'Soul Jazz', 300, 'Mercredi 18h-19h15'],
-  ['soul-ados-2', 'DANSE SOUL JAZZ ADOS - NIVEAU 2', 'Soul Jazz', 300, 'Jeudi - horaire à confirmer'],
-  ['street-ados', 'STREET DÉBUTANT ADOS', 'Street', 350, 'Samedi 12h-13h'],
-  ['street-adultes', 'STREET DÉBUTANT ADULTES', 'Street', 350, 'Mercredi 20h45-21h45'],
-  ['barre-terre', 'SWEET BARRE À TERRE', 'Adultes', 300, 'Mardi 19h30-20h30'],
+  ['soul-ados-2', 'DANSE SOUL JAZZ ADOS - NIVEAU 2', 'Soul Jazz', 300, 'Jeudi - horaire a confirmer'],
+  ['street-ados', 'STREET DEBUTANT ADOS', 'Street', 350, 'Samedi 12h-13h'],
+  ['street-adultes', 'STREET DEBUTANT ADULTES', 'Street', 350, 'Mercredi 20h45-21h45'],
+  ['barre-terre', 'SWEET BARRE A TERRE', 'Adultes', 300, 'Mardi 19h30-20h30'],
   ['technique', 'COURS TECHNIQUE', 'Technique', 180, 'Vendredi 18h30-19h45'],
-  ['concours-cnd', 'PRÉPARATION AUX CONCOURS CND', 'Technique', 180, 'Classique et Jazz - à confirmer']
+  ['concours-cnd', 'PREPARATION AUX CONCOURS CND', 'Technique', 180, 'Classique et Jazz - a confirmer']
 ];
 
 const MAIN_SHEET = 'Toutes les inscriptions';
@@ -44,14 +45,14 @@ const CATEGORY_SHEETS = {
 };
 
 const HEADERS = [
-  'Date inscription', 'Statut', 'Catégorie', 'ID cours', 'Cours choisi', 'Horaire',
-  'Prix cours', 'Total dossier', 'Places restantes', 'Âge déclaré', 'Nom parent',
-  'Nom enfant / élève', 'Date de naissance', 'Téléphone', 'Email', 'Adresse',
-  'Message', 'Mention légale'
+  'Date inscription', 'Statut', 'Categorie', 'ID cours', 'Cours choisi', 'Horaire',
+  'Prix cours', 'Total dossier', 'Places restantes', 'Age declare', 'Nom parent',
+  'Nom enfant / eleve', 'Date de naissance', 'Telephone', 'Email', 'Adresse',
+  'Message', 'Mention legale'
 ];
 
 function setupDanceInscriptionSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
   setHeaders_(sheet_(ss, MAIN_SHEET), HEADERS);
   setHeaders_(sheet_(ss, WAITLIST_SHEET), HEADERS);
 
@@ -60,7 +61,7 @@ function setupDanceInscriptionSheet() {
   });
 
   const courses = sheet_(ss, COURSE_SHEET);
-  setHeaders_(courses, ['ID cours', 'Cours', 'Catégorie', 'Prix', 'Capacité max', 'Horaire']);
+  setHeaders_(courses, ['ID cours', 'Cours', 'Categorie', 'Prix', 'Capacite max', 'Horaire']);
   if (courses.getLastRow() < 2) {
     const rows = COURSES.map(c => [c[0], c[1], c[2], c[3], MAX_PER_COURSE, c[4]]);
     courses.getRange(2, 1, rows.length, 6).setValues(rows);
@@ -82,35 +83,35 @@ function sendNotificationEmail_(payload) {
   try {
     const courses = payload.selectedCourses || [];
     const lines = courses.map(c =>
-      '- ' + (c.title || '') + ' (' + (c.category || '') + ', ' + (c.schedule || '') + ') : ' + Number(c.price || 0) + '€'
+      '- ' + (c.title || '') + ' (' + (c.category || '') + ', ' + (c.schedule || '') + ') : ' + Number(c.price || 0) + ' EUR'
     ).join('\n');
 
     const total = Number(payload.total || 0);
-    const subject = 'Nouvelle pré-inscription danse - ' +
-      (payload.childName || payload.parentName || 'élève') + ' (' + total + '€)';
+    const subject = 'Nouvelle pre-inscription danse - ' +
+      (payload.childName || payload.parentName || 'eleve') + ' (' + total + ' EUR)';
 
     const body =
-      'Nouvelle pré-inscription reçue depuis le site.\n\n' +
-      '=== COORDONNÉES ===\n' +
+      'Nouvelle pre-inscription recue depuis le site.\n\n' +
+      '=== COORDONNEES ===\n' +
       'Nom du parent : ' + (payload.parentName || '') + '\n' +
-      'Nom enfant / élève : ' + (payload.childName || '') + '\n' +
-      'Âge déclaré : ' + (payload.age || '') + '\n' +
+      'Nom enfant / eleve : ' + (payload.childName || '') + '\n' +
+      'Age declare : ' + (payload.age || '') + '\n' +
       'Date de naissance : ' + (payload.birthDate || '') + '\n' +
-      'Téléphone : ' + (payload.phone || '') + '\n' +
+      'Telephone : ' + (payload.phone || '') + '\n' +
       'Email : ' + (payload.email || '') + '\n' +
       'Adresse : ' + (payload.address || '') + '\n' +
       'Message : ' + (payload.message || '') + '\n\n' +
       '=== COURS CHOISIS ===\n' + (lines || '(aucun)') + '\n\n' +
-      '=== TOTAL À PAYER : ' + total + '€ ===\n\n' +
-      'Rappel : cette pré-inscription ne garantit pas l\'adhésion à l\'école de danse.\n' +
-      'Toutes les inscriptions sont aussi enregistrées dans la Google Sheet.';
+      '=== TOTAL A PAYER : ' + total + ' EUR ===\n\n' +
+      'Rappel : cette pre-inscription ne garantit pas l\'adhesion a l\'ecole de danse.\n' +
+      'Toutes les inscriptions sont aussi enregistrees dans la Google Sheet.';
 
     const options = {};
     if (payload.email) options.replyTo = payload.email;
 
     MailApp.sendEmail(NOTIFY_EMAIL, subject, body, options);
   } catch (err) {
-    // Ne bloque jamais l'enregistrement dans la Sheet si l'email échoue.
+    // Ne bloque jamais l'enregistrement dans la Sheet si l'email echoue.
     console.error('Email notification failed: ' + err);
   }
 }
@@ -121,7 +122,7 @@ function doGet(e) {
 }
 
 function savePayload_(payload) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
   const all = sheet_(ss, MAIN_SHEET);
   const waitlist = sheet_(ss, WAITLIST_SHEET);
   const availability = getAvailability_();
@@ -130,13 +131,13 @@ function savePayload_(payload) {
 
   courses.forEach(course => {
     const remaining = availability[course.id] ? availability[course.id].remaining : MAX_PER_COURSE;
-    const status = remaining <= 0 ? 'Liste attente' : 'Pré-inscription';
+    const status = remaining <= 0 ? 'Liste attente' : 'Pre-inscription';
     const row = [
       new Date(), status, course.category || '', course.id || '', course.title || '', course.schedule || '',
       Number(course.price || 0), Number(payload.total || 0), Number(remaining || 0), payload.age || '',
       payload.parentName || '', payload.childName || '', payload.birthDate || '', payload.phone || '',
       payload.email || '', payload.address || '', payload.message || '',
-      "Cette pré-inscription ne garantit pas votre adhésion à l'école de danse."
+      "Cette pre-inscription ne garantit pas votre adhesion a l'ecole de danse."
     ];
 
     all.appendRow(row);
@@ -150,9 +151,9 @@ function savePayload_(payload) {
 }
 
 function refreshAvailabilitySheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
   const sh = sheet_(ss, AVAILABILITY_SHEET);
-  setHeaders_(sh, ['ID cours', 'Cours', 'Catégorie', 'Capacité max', 'Inscriptions reçues', 'Places restantes', 'Statut']);
+  setHeaders_(sh, ['ID cours', 'Cours', 'Categorie', 'Capacite max', 'Inscriptions recues', 'Places restantes', 'Statut']);
   if (sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 7).clearContent();
 
   const availability = getAvailability_();
@@ -164,7 +165,7 @@ function refreshAvailabilitySheet() {
 }
 
 function getAvailability_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
   const all = sheet_(ss, MAIN_SHEET);
   const values = all.getDataRange().getValues();
   const counts = {};
@@ -172,7 +173,7 @@ function getAvailability_() {
   for (let i = 1; i < values.length; i++) {
     const status = String(values[i][1] || '');
     const courseId = String(values[i][3] || '');
-    if (!courseId || status === 'Liste attente' || status === 'Refusé') continue;
+    if (!courseId || status === 'Liste attente' || status === 'Refuse') continue;
     counts[courseId] = (counts[courseId] || 0) + 1;
   }
 
