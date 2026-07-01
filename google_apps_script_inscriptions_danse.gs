@@ -13,6 +13,7 @@ Installation :
 const MAX_PER_COURSE = 30;
 const NOTIFY_EMAIL = 'contactdelphineletort@gmail.com';
 const SHEET_ID = '15VH3p9iLwv1gOuKkgRMU59mAd7PbTCPW14BeEbH2F7Y';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit';
 
 const COURSES = [
   ['classique-gs', 'EVEIL A LA DANSE - GS', 'Classique', 350, 'Samedi 9h15-10h'],
@@ -106,7 +107,13 @@ function sendNotificationEmail_(payload) {
       'Rappel : cette pre-inscription ne garantit pas l\'adhesion a l\'ecole de danse.\n' +
       'Toutes les inscriptions sont aussi enregistrees dans la Google Sheet.';
 
-    const options = {};
+    // Version HTML : le mot "Google Sheet" devient un lien cliquable vers la vraie feuille.
+    const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const htmlBody = esc(body)
+      .replace(/\n/g, '<br>')
+      .replace('Google Sheet', '<a href="' + SHEET_URL + '">Google Sheet</a>');
+
+    const options = { htmlBody: htmlBody };
     if (payload.email) options.replyTo = payload.email;
 
     MailApp.sendEmail(NOTIFY_EMAIL, subject, body, options);
