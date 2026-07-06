@@ -2,21 +2,39 @@
   const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbze_x40PZ3y1YK8jUq2qlXUFhgklDcgGOMNBQsN_9psaz9MH5FFand-UNPvvSGeMWZY/exec";
   const MAX_PER_COURSE = 30;
 
+  // Tarifs 2026-2027 : prix annuel fixé par la durée hebdomadaire du cours (site officiel /tarifs)
+  const PRICE_BY_DURATION = {
+    "45 min": 300,
+    "1 h": 360,
+    "1 h 15": 375,
+    "1 h 30": 390
+  };
+  const ADULTE = [16,17,18,30]; // valeurs sélectionnables dans AGES (16-18 puis "Adulte")
+
   const COURSES = [
-    {id:"classique-gs", title:"ÉVEIL À LA DANSE - GS", category:"Classique", ages:[5], price:350, duration:"45 min", schedule:"Samedi 9h15-10h", level:"Grande section", taken:18},
-    {id:"classique-cp", title:"DANSE CLASSIQUE - CP", category:"Classique", ages:[6], price:350, duration:"1 h", schedule:"Samedi 10h15-11h15", level:"CP", taken:21},
-    {id:"classique-ce1-ce2", title:"DANSE CLASSIQUE - CE1 / CE2", category:"Classique", ages:[7,8], price:350, duration:"1 h", schedule:"Samedi 11h15-12h15", level:"CE1 / CE2", taken:26},
-    {id:"classique-3", title:"DANSE CLASSIQUE 3", category:"Classique", ages:[9,10,11], price:350, duration:"1 h 15", schedule:"Samedi 13h45-15h", level:"Enfants", taken:24},
-    {id:"classique-4", title:"DANSE CLASSIQUE 4", category:"Classique", ages:[11,12,13], price:350, duration:"1 h 15", schedule:"Samedi 15h-16h15", level:"Pré-ados", taken:28},
-    {id:"classique-5", title:"DANSE CLASSIQUE 5", category:"Classique", ages:[13,14,15,16,17,18], price:350, duration:"1 h 30", schedule:"Mercredi 16h30-18h", level:"Ados", taken:20},
-    {id:"soul-enfants", title:"DANSE SOUL JAZZ ENFANTS", category:"Soul Jazz", ages:[9,10,11,12], price:300, duration:"1 h", schedule:"Jeudi 18h15 ou selon groupe", level:"Enfants", taken:23},
-    {id:"soul-ados-1", title:"DANSE SOUL JAZZ ADOS - NIVEAU 1", category:"Soul Jazz", ages:[12,13,14,15,16,17,18], price:300, duration:"1 h 15", schedule:"Mercredi 18h-19h15", level:"Ados niveau 1", taken:28},
-    {id:"soul-ados-2", title:"DANSE SOUL JAZZ ADOS - NIVEAU 2", category:"Soul Jazz", ages:[13,14,15,16,17,18], price:300, duration:"1 h 15", schedule:"Jeudi - horaire à confirmer", level:"Ados niveau 2", taken:25},
-    {id:"street-ados", title:"STREET DÉBUTANT ADOS", category:"Street", ages:[13,14,15,16,17,18], price:350, duration:"1 h", schedule:"Samedi 12h-13h", level:"13-18 ans", taken:22},
-    {id:"street-adultes", title:"STREET DÉBUTANT ADULTES", category:"Street", ages:[18,19,20,21,22,23,24,25,26,27,28,29,30,40,50,60], price:350, duration:"1 h", schedule:"Mercredi 20h45-21h45", level:"Adultes", taken:27},
-    {id:"barre-terre", title:"SWEET BARRE À TERRE", category:"Adultes", ages:[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,50,60], price:300, duration:"1 h", schedule:"Mardi 19h30-20h30", level:"Ados / adultes", taken:19},
-    {id:"technique", title:"COURS TECHNIQUE", category:"Technique", ages:[12,13,14,15,16,17,18], price:180, duration:"1 h 15", schedule:"Vendredi 18h30-19h45", level:"À partir de 12 ans", taken:17},
-    {id:"concours-cnd", title:"PRÉPARATION AUX CONCOURS CND", category:"Technique", ages:[12,13,14,15,16,17,18], price:180, duration:"Cours supplémentaire", schedule:"Classique et Jazz - à confirmer", level:"Concours", taken:14}
+    {id:"classique-gs", title:"ÉVEIL À LA DANSE - GS", category:"Classique", ages:[5], duration:"45 min", price:PRICE_BY_DURATION["45 min"], schedule:"Mercredi 9h15-10h", level:"Grande section", taken:18},
+    {id:"classique-cp", title:"DANSE CLASSIQUE - CP", category:"Classique", ages:[6], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 10h15-11h15", level:"CP", taken:21},
+    {id:"classique-ce1-ce2", title:"DANSE CLASSIQUE - CE1 / CE2", category:"Classique", ages:[7,8], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 11h15-12h15", level:"CE1 / CE2", taken:26},
+    {id:"classique-3", title:"DANSE CLASSIQUE 3", category:"Classique", ages:[9,10,11], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 13h45-15h", level:"Enfants", taken:24},
+    {id:"classique-4", title:"DANSE CLASSIQUE 4", category:"Classique", ages:[11,12,13], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 15h-16h15", level:"Pré-ados", taken:28},
+    {id:"classique-5", title:"DANSE CLASSIQUE 5", category:"Classique", ages:[13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mercredi 16h30-18h", level:"Ados", taken:20},
+    {id:"classique-avance-pointes", title:"CLASSIQUE AVANCÉ POINTES", category:"Classique", ages:[11,12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 18h15-19h45", level:"Avancé pointes", taken:0},
+    {id:"soul-enfants", title:"DANSE SOUL JAZZ ENFANTS", category:"Soul Jazz", ages:[9,10,11,12], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Jeudi 17h15-18h15", level:"Enfants", taken:23},
+    {id:"soul-ados-1", title:"DANSE SOUL JAZZ ADOS - NIVEAU 1", category:"Soul Jazz", ages:[12,13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 18h-19h15", level:"Ados niveau 1", taken:28},
+    {id:"soul-ados-2", title:"DANSE SOUL JAZZ ADOS - NIVEAU 2", category:"Soul Jazz", ages:[13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Jeudi 18h15-19h30", level:"Ados niveau 2", taken:25},
+    {id:"soul-adultes-mardi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 19h45-21h15", level:"Adultes", taken:0},
+    {id:"soul-adultes-jeudi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Jeudi 19h30-21h", level:"Adultes", taken:0},
+    {id:"street-1", title:"STREET 1", category:"Street", ages:[8,9,10,11], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 17h15-18h15", level:"8-11 ans", taken:0},
+    {id:"street-2", title:"STREET 2", category:"Street", ages:[11,12,13,14], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 18h15-19h15", level:"11-14 ans", taken:0},
+    {id:"street-3", title:"STREET 3", category:"Street", ages:[15,16,17,18,30], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 19h15-20h15", level:"15 ans et plus", taken:0},
+    {id:"street-4", title:"STREET 4", category:"Street", ages:[15,16,17,18,30], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 20h15-21h15", level:"15 ans et plus - cours avancé", taken:0},
+    {id:"street-ados", title:"STREET DÉBUTANT ADOS", category:"Street", ages:[13,14,15,16,17,18], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Samedi 12h-13h", level:"13-18 ans", taken:22},
+    {id:"street-adultes", title:"STREET DÉBUTANT ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 20h45-21h45", level:"Adultes", taken:27},
+    {id:"street-jazz-adultes", title:"STREET JAZZ ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Vendredi 20h-21h", level:"Adultes", taken:0},
+    {id:"barre-terre", title:"SWEET BARRE À TERRE", category:"Adultes", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 19h30-20h30", level:"Ados / adultes", taken:19},
+    {id:"technique", title:"COURS TECHNIQUE", category:"Technique", ages:[12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Vendredi 18h30-20h", level:"À partir de 12 ans", taken:17},
+    {id:"kpop-enfants", title:"KPOP - COURS ENFANTS", category:"Kpop", ages:[6,7,8,9,10,11], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Samedi 13h-15h", level:"6-11 ans", taken:0},
+    {id:"kpop-ados", title:"KPOP - ADOS", category:"Kpop", ages:[11,12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Samedi 15h-16h30", level:"11 ans et plus", taken:0}
   ];
 
   const AGES = [{label:"2-4 ans (éveil à l'émotion)",value:2},5,6,7,8,9,10,11,12,13,14,15,16,17,18,{label:"Adulte",value:30}];
