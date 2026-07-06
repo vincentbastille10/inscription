@@ -121,14 +121,11 @@
       return;
     }
     list.forEach(c => {
-      const r = remaining(c);
       const sel = state.selected.has(c.id);
-      const full = r <= 0;
-      const urgent = r > 0 && r <= 3;
       const card = document.createElement("article");
-      card.className = `course ${sel ? "selected" : ""} ${full ? "disabled" : ""}`;
-      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span><span class="tag ${urgent ? "hot" : "ok"}">${full ? "Liste d’attente" : urgent ? "Plus que " + r + " places" : r + " places restantes"}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p><div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : full ? "Complet" : "Ajouter"}</span></div>`;
-      if(!full) card.onclick = () => toggle(c);
+      card.className = `course ${sel ? "selected" : ""}`;
+      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p><div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : "Ajouter"}</span></div>`;
+      card.onclick = () => toggle(c);
       grid.appendChild(card);
     });
   }
