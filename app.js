@@ -146,7 +146,7 @@
       const sel = state.selected.has(c.id);
       const card = document.createElement("article");
       card.className = `course ${sel ? "selected" : ""}`;
-      const requiresNote = c.requiresStreet ? `<p>Gratuit à condition de choisir aussi un cours Street</p>` : "";
+      const requiresNote = c.requiresStreet ? `<p class="free-note">Offert — inscription à un cours Street obligatoire</p>` : "";
       card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p>${requiresNote}<div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : "Ajouter"}</span></div>`;
       card.onclick = () => toggle(c);
       grid.appendChild(card);
