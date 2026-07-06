@@ -33,8 +33,9 @@
     {id:"street-jazz-adultes", title:"STREET JAZZ ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Vendredi 20h-21h", level:"Adultes", taken:0},
     {id:"barre-terre", title:"SWEET BARRE À TERRE", category:"Adultes", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 19h30-20h30", level:"Ados / adultes", taken:19},
     {id:"technique", title:"COURS TECHNIQUE", category:"Technique", ages:[12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Vendredi 18h30-20h", level:"À partir de 12 ans", taken:17},
-    {id:"kpop-enfants", title:"KPOP - COURS ENFANTS", category:"Kpop", ages:[6,7,8,9,10,11], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Samedi 13h-15h", level:"6-11 ans", taken:0},
-    {id:"kpop-ados", title:"KPOP - ADOS", category:"Kpop", ages:[11,12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Samedi 15h-16h30", level:"11 ans et plus", taken:0}
+    // Kpop est offert (0€) mais conditionné à la prise d'au moins un cours Street
+    {id:"kpop-enfants", title:"KPOP - COURS ENFANTS", category:"Kpop", ages:[6,7,8,9,10,11], duration:"1 h 30", price:0, requiresStreet:true, schedule:"Samedi 13h-15h", level:"6-11 ans", taken:0},
+    {id:"kpop-ados", title:"KPOP - ADOS", category:"Kpop", ages:[11,12,13,14,15,16,17,18], duration:"1 h 30", price:0, requiresStreet:true, schedule:"Samedi 15h-16h30", level:"11 ans et plus", taken:0}
   ];
 
   const AGES = [{label:"2-4 ans (éveil à l'émotion)",value:2},5,6,7,8,9,10,11,12,13,14,15,16,17,18,{label:"Adulte",value:30}];
@@ -142,17 +143,31 @@
       const sel = state.selected.has(c.id);
       const card = document.createElement("article");
       card.className = `course ${sel ? "selected" : ""}`;
-      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p><div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : "Ajouter"}</span></div>`;
+      const requiresNote = c.requiresStreet ? `<p>Gratuit à condition de choisir aussi un cours Street</p>` : "";
+      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p>${requiresNote}<div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : "Ajouter"}</span></div>`;
       card.onclick = () => toggle(c);
       grid.appendChild(card);
     });
   }
 
+  const hasStreetSelected = () => [...state.selected.values()].some(x => x.category === "Street");
+
   function toggle(c){
     if(state.selected.has(c.id)){
       state.selected.delete(c.id);
       botMsg(`J’ai retiré <b>${c.title}</b>.`);
+      if(c.category === "Street" && !hasStreetSelected()){
+        const droppedKpop = [...state.selected.values()].filter(x => x.requiresStreet);
+        droppedKpop.forEach(k => state.selected.delete(k.id));
+        if(droppedKpop.length){
+          botMsg(`Le Kpop étant gratuit uniquement avec un cours Street, j’ai aussi retiré <b>${droppedKpop.map(k => k.title).join(", ")}</b>.`);
+        }
+      }
     }else{
+      if(c.requiresStreet && !hasStreetSelected()){
+        botMsg(`<b>${c.title}</b> est gratuit, mais uniquement si vous choisissez aussi un cours Street. Ajoutez d’abord un cours Street.`);
+        return;
+      }
       state.selected.set(c.id, c);
       botMsg(`J’ai ajouté <b>${c.title}</b>. Prix du cours : <b>${euro(c.price)}</b>.`);
     }
