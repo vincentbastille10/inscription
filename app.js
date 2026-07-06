@@ -45,6 +45,9 @@
   const $ = id => document.getElementById(id);
   const bot = $("botBody");
   const grid = $("courseGrid");
+  const kpopModal = $("kpopModal");
+  $("kpopModalClose").onclick = () => kpopModal.classList.remove("show");
+  kpopModal.onclick = e => { if(e.target === kpopModal) kpopModal.classList.remove("show"); };
 
   const euro = n => `${Number(n || 0).toLocaleString("fr-FR")}€`;
   const remaining = c => state.availability[c.id]?.remaining ?? Math.max(0, MAX_PER_COURSE - Number(c.taken || 0));
@@ -165,7 +168,7 @@
       }
     }else{
       if(c.requiresStreet && !hasStreetSelected()){
-        botMsg(`<b>${c.title}</b> est gratuit, mais uniquement si vous choisissez aussi un cours Street. Ajoutez d’abord un cours Street.`);
+        kpopModal.classList.add("show");
         return;
       }
       state.selected.set(c.id, c);
