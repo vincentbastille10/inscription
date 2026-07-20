@@ -187,7 +187,7 @@
     const t = total();
     $("totalAmount").textContent = euro(t);
     $("formTotal").textContent = euro(t);
-    $("hiddenAge").value = state.age || "";
+    $("hiddenAge").value = state.age === 30 ? "Adulte" : (state.age || "");
     $("hiddenCourses").value = JSON.stringify([...state.selected.values()]);
     $("hiddenTotal").value = String(t);
 
@@ -232,7 +232,7 @@
     const data = Object.fromEntries(new FormData(e.currentTarget).entries());
     const payload = {
       createdAt: new Date().toISOString(),
-      age: state.age,
+      age: state.age === 30 ? "Adulte" : state.age,
       parentName: data.parentName,
       childName: data.childName,
       birthDate: data.birthDate,
