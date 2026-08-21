@@ -17,20 +17,20 @@
     {id:"classique-ce1-ce2", title:"DANSE CLASSIQUE - CE1 / CE2", category:"Classique", ages:[7,8], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 11h15-12h15", level:"CE1 / CE2", taken:26},
     {id:"classique-3", title:"DANSE CLASSIQUE 3", category:"Classique", ages:[9,10,11], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 13h45-15h", level:"Enfants", taken:24},
     {id:"classique-4", title:"DANSE CLASSIQUE 4", category:"Classique", ages:[11,12,13], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 15h-16h15", level:"Pré-ados", taken:28},
-    {id:"classique-5", title:"DANSE CLASSIQUE 5", category:"Classique", ages:[13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mercredi 16h30-18h", level:"Ados", taken:20},
+    {id:"classique-5", title:"DANSE CLASSIQUE 5", category:"Classique", ages:[13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mercredi 16h30-18h", level:"Ados", taken:20, full:true},
     {id:"classique-avance-pointes", title:"CLASSIQUE AVANCÉ POINTES", category:"Classique", ages:[11,12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 18h15-19h45", level:"Avancé pointes", taken:0},
     {id:"soul-enfants", title:"DANSE SOUL JAZZ ENFANTS", category:"Soul Jazz", ages:[9,10,11,12], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Jeudi 17h15-18h15", level:"Enfants", taken:23},
     {id:"soul-ados-1", title:"DANSE SOUL JAZZ ADOS - NIVEAU 1", category:"Soul Jazz", ages:[12,13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 18h-19h15", level:"Ados niveau 1", taken:28},
     {id:"soul-ados-2", title:"DANSE SOUL JAZZ ADOS - NIVEAU 2", category:"Soul Jazz", ages:[13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Jeudi 18h15-19h30", level:"Ados niveau 2", taken:25},
-    {id:"soul-adultes-mardi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 19h45-21h15", level:"Adultes", taken:0},
+    {id:"soul-adultes-mardi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 19h45-21h15", level:"Adultes", taken:0, full:true},
     {id:"soul-adultes-jeudi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Jeudi 19h30-21h", level:"Adultes", taken:0},
     {id:"street-1", title:"STREET 1", category:"Street", ages:[8,9,10,11], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 17h15-18h15", level:"8-11 ans", taken:0},
-    {id:"street-2", title:"STREET 2", category:"Street", ages:[11,12,13,14], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 18h15-19h15", level:"11-14 ans", taken:0},
+    {id:"street-2", title:"STREET 2", category:"Street", ages:[11,12,13,14], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 18h15-19h15", level:"11-14 ans", taken:0, full:true},
     {id:"street-3", title:"STREET 3", category:"Street", ages:[15,16,17,18,30], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 19h15-20h15", level:"15 ans et plus", taken:0},
     {id:"street-4", title:"STREET 4", category:"Street", ages:[15,16,17,18,30], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 20h15-21h15", level:"15 ans et plus - cours avancé", taken:0},
     {id:"street-ados", title:"STREET DÉBUTANT ADOS", category:"Street", ages:[13,14,15,16,17,18], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Samedi 12h-13h", level:"13-18 ans", taken:22},
     {id:"street-adultes", title:"STREET DÉBUTANT ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 20h45-21h45", level:"Adultes", taken:27},
-    {id:"street-jazz-adultes", title:"STREET JAZZ ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Vendredi 20h-21h", level:"Adultes", taken:0},
+    {id:"street-jazz-adultes", title:"STREET JAZZ ADULTES", category:"Street", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Vendredi 20h-21h", level:"Adultes", taken:0, full:true},
     {id:"barre-terre", title:"SWEET BARRE À TERRE", category:"Adultes", ages:ADULTE, duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Mercredi 19h30-20h30", level:"Ados / adultes", taken:19},
     {id:"technique", title:"COURS TECHNIQUE", category:"Technique", ages:[12,13,14,15,16,17,18], duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Vendredi 18h30-20h", level:"À partir de 12 ans", taken:17},
     // Kpop est offert (0€) mais conditionné à la prise d'au moins un cours Street
@@ -143,12 +143,18 @@
       return;
     }
     list.forEach(c => {
+      const isFull = c.full === true || remaining(c) === 0;
       const sel = state.selected.has(c.id);
       const card = document.createElement("article");
-      card.className = `course ${sel ? "selected" : ""}`;
+      card.className = `course ${sel ? "selected" : ""} ${isFull ? "full" : ""}`;
       const requiresNote = c.requiresStreet ? `<p class="free-note">Offert — inscription à un cours Street obligatoire</p>` : "";
-      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span></div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p>${requiresNote}<div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${sel ? "Ajouté" : "Ajouter"}</span></div>`;
-      card.onclick = () => toggle(c);
+      const stateLabel = isFull ? "Complet" : (sel ? "Ajouté" : "Ajouter");
+      card.innerHTML = `<div class="meta"><span class="tag">${c.category}</span><span class="tag">${c.duration}</span>${isFull ? '<span class="tag full-tag">Complet</span>' : ""}</div><h4>${c.title}</h4><p><b>${c.schedule}</b></p><p>${c.level}</p>${requiresNote}<div class="bottom"><span class="price">${euro(c.price)}</span><span class="state">${stateLabel}</span></div>`;
+      if(isFull){
+        card.setAttribute("aria-disabled", "true");
+      }else{
+        card.onclick = () => toggle(c);
+      }
       grid.appendChild(card);
     });
   }
@@ -167,6 +173,10 @@
         }
       }
     }else{
+      if(c.full === true || remaining(c) === 0){
+        botMsg(`<b>${c.title}</b> est complet, il n’est plus possible de s’y inscrire.`);
+        return;
+      }
       if(c.requiresStreet && !hasStreetSelected()){
         kpopModal.classList.add("show");
         return;

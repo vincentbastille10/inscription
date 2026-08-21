@@ -339,6 +339,33 @@ h1{
   cursor:not-allowed;
 }
 
+.course.full{
+  cursor:not-allowed;
+  background:#faf6f7;
+  border-color:#e7d7dc;
+}
+
+.course.full:hover{
+  transform:none;
+  box-shadow:none;
+}
+
+.course.full h4,
+.course.full .price{
+  color:#9a8791;
+}
+
+.tag.full-tag{
+  color:#fff;
+  background:#b0778a;
+  border-color:#b0778a;
+}
+
+.course.full .state{
+  background:#e3d3d9;
+  color:#7c6570;
+}
+
 .course h4{
   margin:0;
   font-size:18px;
