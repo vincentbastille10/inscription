@@ -22,7 +22,7 @@
     {id:"soul-enfants", title:"DANSE SOUL JAZZ ENFANTS", category:"Soul Jazz", ages:[9,10,11,12], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Jeudi 17h15-18h15", level:"Enfants", taken:23},
     {id:"soul-ados-1", title:"DANSE SOUL JAZZ ADOS - NIVEAU 1", category:"Soul Jazz", ages:[12,13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Mercredi 18h-19h15", level:"Ados niveau 1", taken:28},
     {id:"soul-ados-2", title:"DANSE SOUL JAZZ ADOS - NIVEAU 2", category:"Soul Jazz", ages:[13,14,15,16,17,18], duration:"1 h 15", price:PRICE_BY_DURATION["1 h 15"], schedule:"Jeudi 18h15-19h30", level:"Ados niveau 2", taken:25},
-    {id:"soul-adultes-mardi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Mardi 19h45-21h15", level:"Adultes", taken:0, full:true},
+    {id:"soul-adultes-mardi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:330, schedule:"Mardi 19h45-21h15", level:"Adultes", taken:0},
     {id:"soul-adultes-jeudi", title:"DANSE SOUL JAZZ ADULTES", category:"Soul Jazz", ages:ADULTE, duration:"1 h 30", price:PRICE_BY_DURATION["1 h 30"], schedule:"Jeudi 19h30-21h", level:"Adultes", taken:0},
     {id:"street-1", title:"STREET 1", category:"Street", ages:[8,9,10,11], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 17h15-18h15", level:"8-11 ans", taken:0},
     {id:"street-2", title:"STREET 2", category:"Street", ages:[11,12,13,14], duration:"1 h", price:PRICE_BY_DURATION["1 h"], schedule:"Lundi 18h15-19h15", level:"11-14 ans", taken:0, full:true},
