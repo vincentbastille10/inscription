@@ -11,6 +11,12 @@ Installation :
 */
 
 const MAX_PER_COURSE = 30;
+// Plafond personnalise par cours (sinon MAX_PER_COURSE s'applique).
+// Cours rouvert : on leve la limite pour qu'il reste en "Pre-inscription".
+const CAPACITY_OVERRIDE = {
+  'street-adultes': 9999
+};
+const capacityFor_ = id => CAPACITY_OVERRIDE[id] || MAX_PER_COURSE;
 const NOTIFY_EMAIL = 'contactdelphineletort@gmail.com';
 const SHEET_ID = '15VH3p9iLwv1gOuKkgRMU59mAd7PbTCPW14BeEbH2F7Y';
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit';
@@ -166,7 +172,7 @@ function refreshAvailabilitySheet() {
   const availability = getAvailability_();
   const rows = COURSES.map(c => {
     const a = availability[c[0]];
-    return [c[0], c[1], c[2], MAX_PER_COURSE, a.reserved, a.remaining, a.remaining <= 0 ? 'Complet' : a.remaining <= 3 ? 'Urgent' : 'Ouvert'];
+    return [c[0], c[1], c[2], capacityFor_(c[0]), a.reserved, a.remaining, a.remaining <= 0 ? 'Complet' : a.remaining <= 3 ? 'Urgent' : 'Ouvert'];
   });
   sh.getRange(2, 1, rows.length, 7).setValues(rows);
 }
@@ -187,7 +193,7 @@ function getAvailability_() {
   const out = {};
   COURSES.forEach(c => {
     const reserved = counts[c[0]] || 0;
-    out[c[0]] = { reserved, remaining: Math.max(0, MAX_PER_COURSE - reserved) };
+    out[c[0]] = { reserved, remaining: Math.max(0, capacityFor_(c[0]) - reserved) };
   });
   return out;
 }
