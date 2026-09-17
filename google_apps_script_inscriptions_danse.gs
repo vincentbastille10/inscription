@@ -14,7 +14,7 @@ const MAX_PER_COURSE = 30;
 // Plafond personnalise par cours (sinon MAX_PER_COURSE s'applique).
 // Cours rouvert : on leve la limite pour qu'il reste en "Pre-inscription".
 const CAPACITY_OVERRIDE = {
-  'street-adultes': 9999
+  'street-adultes': 100
 };
 const capacityFor_ = id => CAPACITY_OVERRIDE[id] || MAX_PER_COURSE;
 const NOTIFY_EMAIL = 'contactdelphineletort@gmail.com';
